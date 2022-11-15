@@ -7,7 +7,9 @@ import subprocess
 
 class MediumPublisher:
 
-	TOKEN = open("token.ini", "r").read()
+	TOKEN = None
+	with open("token.ini", "r") as f:
+		TOKEN = f.read()
 
 	@classmethod
 	def __get_header( self ):
@@ -25,15 +27,16 @@ class MediumPublisher:
 	@classmethod
 	def read_file( self, filepath):
 		'''reads file from input filepath and returns a dict with the file content and contentFormat for the publish payload'''
-		f = open(filepath, 'r', encoding='utf-8')
-		content = f.read()
-		if not f.closed: f.close()
+		content = None
+		with open(filepath, 'r', encoding='utf-8') as f:
+			content = f.read()
 
 		if filepath.find('.') < 0:
-			file_ext = ""
-		else:
-			file_ext = filepath[filepath.find(".")+1:]
-		if file_ext == "md": file_ext = "markdown"
+			return {"content": content, "contentFormat": ""}
+
+		file_ext = filepath[ filepath.find(".")+1: ]
+		if file_ext == "md":
+			file_ext = "markdown"
 		return {"content": content, "contentFormat": file_ext}
 
 	@classmethod
