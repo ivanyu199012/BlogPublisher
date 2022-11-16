@@ -72,6 +72,8 @@ class MediumPublisher:
 		url = f"https://api.medium.com/v1/users/{author_id}/posts"
 		response = requests.post(url, headers=self.__get_header(), data=data)
 		if response.status_code not in [200, 201]:
+			print(f'{ response.status_code= }')
+			print(f'{ response.content= }')
 			return None
 
 		response_json = response.json()
