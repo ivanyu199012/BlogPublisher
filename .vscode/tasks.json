@@ -6,7 +6,7 @@
 		{
 			"label": "Test publish",
 			"type": "shell",
-			"command": "h2mEnv\\Scripts\\python.exe",
+			"command": "blogPubEnv\\Scripts\\python.exe",
 			"args": [
 				"publish.py",
 				"temp\\Django_background_task.md",
@@ -16,6 +16,14 @@
 				"https://ivanyu2021.hashnode.dev/a-simple-approach-for-background-task-in-django",
 				"--tags",
 				"Python,Django,Threads,Message Queue"
+			]
+		},
+		{
+			"label": "Test gistCodeUploader",
+			"type": "shell",
+			"command": "blogPubEnv\\Scripts\\python.exe",
+			"args": [
+				"gistCodeUploaderTest.py",
 			]
 		}
 	]
