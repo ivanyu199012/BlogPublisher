@@ -7,9 +7,12 @@ import subprocess
 
 class MediumPublisher:
 
-	TOKEN = None
-	with open("token.ini", "r") as f:
-		TOKEN = f.read()
+	@classmethod
+	def __get_token( self ):
+		if not hasattr( self, 'TOKEN' ):
+			with open("token.ini", "r") as f:
+				self.TOKEN = f.read()
+		return self.TOKEN
 
 	@classmethod
 	def __get_header( self ):
@@ -19,13 +22,13 @@ class MediumPublisher:
 			"Accept-Language"	:"en-US,en;q=0.5",
 			"Connection"	:"keep-alive",
 			"Host"	:"api.medium.com",
-			"Authorization": f"Bearer {self.TOKEN}",
+			"Authorization": f"Bearer {self.__get_token()}",
 			"Upgrade-Insecure-Requests":	"1",
 			"User-Agent":	"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:89.0) Gecko/20100101 Firefox/89.0"
 		}
 
 	@classmethod
-	def read_file( self, filepath):
+	def __read_file( self, filepath):
 		'''reads file from input filepath and returns a dict with the file content and contentFormat for the publish payload'''
 		content = None
 		with open(filepath, 'r', encoding='utf-8') as f:
@@ -46,7 +49,7 @@ class MediumPublisher:
 			"title": args['title'],
 		}
 
-		data = {**data, **self.read_file(args['filepath'])}
+		data = {**data, **self.__read_file(args['filepath'])}
 		if args['tags']:
 			data['tags'] = [t.strip() for t in args['tags'].split(',')]
 
@@ -55,9 +58,9 @@ class MediumPublisher:
 		return data
 
 	@classmethod
-	def get_author_id( self ):
+	def __get_author_id( self ):
 		'''uses the /me medium api endpoint to get the user's author id'''
-		response = requests.get("https://api.medium.com/v1/me", headers=self.__get_header(), params={"Authorization": f"Bearer {self.TOKEN}" })
+		response = requests.get("https://api.medium.com/v1/me", headers=self.__get_header(), params={"Authorization": f"Bearer {self.__get_token()}" })
 		if response.status_code == 200:
 			return response.json()['data']['id']
 		return None
@@ -65,10 +68,9 @@ class MediumPublisher:
 	@classmethod
 	def post_article(self, data):
 		'''posts an article to medium with the input payload'''
-		author_id = self.get_author_id()
+		author_id = self.__get_author_id()
 		url = f"https://api.medium.com/v1/users/{author_id}/posts"
 		response = requests.post(url, headers=self.__get_header(), data=data)
-		print(f'{ response.content= }')
 		if response.status_code not in [200, 201]:
 			return None
 
@@ -97,5 +99,6 @@ if __name__ == "__main__":
 	data = MediumPublisher.prep_data(vars(args))
 	print(f'{ data["title"], data["publishStatus"], data[ "canonicalUrl" ]= }')
 
+	print(f'---------------------------')
 	post_url = MediumPublisher.post_article(data)
 	print(f'{ post_url= }')
