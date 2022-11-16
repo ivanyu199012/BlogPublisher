@@ -4,14 +4,18 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Run publish",
+			"label": "Test publish",
 			"type": "shell",
 			"command": "h2mEnv\\Scripts\\python.exe",
 			"args": [
 				"publish.py",
 				"temp\\Django_background_task.md",
 				"-t",
-				"A simple approach for background task in Django_v1"
+				"A simple approach for background task in Django_v1",
+				"--canonicalUrl",
+				"https://ivanyu2021.hashnode.dev/a-simple-approach-for-background-task-in-django",
+				"--tags",
+				"Python,Django,Threads,Message Queue"
 			]
 		}
 	]

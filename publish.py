@@ -50,6 +50,7 @@ class MediumPublisher:
 		if args['tags']:
 			data['tags'] = [t.strip() for t in args['tags'].split(',')]
 
+		data['canonicalUrl'] = args[ 'canonicalUrl' ] if args[ 'canonicalUrl' ] else None
 		data['publishStatus'] = args['pub'] if args['pub'] else 'draft'
 		return data
 
@@ -67,6 +68,7 @@ class MediumPublisher:
 		author_id = self.get_author_id()
 		url = f"https://api.medium.com/v1/users/{author_id}/posts"
 		response = requests.post(url, headers=self.__get_header(), data=data)
+		print(f'{ response.content= }')
 		if response.status_code not in [200, 201]:
 			return None
 
@@ -82,6 +84,7 @@ if __name__ == "__main__":
 	# add compulsory arguments
 	parser.add_argument('filepath') # positional argument
 	parser.add_argument('-t', '--title', required=True, help="title of post", type=str) # named argument
+	parser.add_argument('-cUrl', '--canonicalUrl', required=True, help="Canonical Url", type=str) # named argument
 
 	# add compulsory arguments
 	parser.add_argument('-a', '--tags', required=False, help="tags, separated by ,", type=str)
@@ -92,7 +95,7 @@ if __name__ == "__main__":
 	print(f'{ args= }')
 
 	data = MediumPublisher.prep_data(vars(args))
-	print(f'{ data["title"], data["publishStatus"]= }')
+	print(f'{ data["title"], data["publishStatus"], data[ "canonicalUrl" ]= }')
 
 	post_url = MediumPublisher.post_article(data)
 	print(f'{ post_url= }')
