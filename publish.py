@@ -45,12 +45,12 @@ class MediumPublisher:
 		data = {
 			"title": args['title'],
 		}
+
 		data = {**data, **self.read_file(args['filepath'])}
 		if args['tags']:
 			data['tags'] = [t.strip() for t in args['tags'].split(',')]
-		data['publishStatus'] = 'draft'
-		if args['pub']:
-			data['publishStatus'] = args['pub']
+
+		data['publishStatus'] = args['pub'] if args['pub'] else 'draft'
 		return data
 
 	@classmethod
@@ -65,14 +65,15 @@ class MediumPublisher:
 	def post_article(self, data):
 		'''posts an article to medium with the input payload'''
 		author_id = self.get_author_id()
-		url = "https://api.medium.com/v1/users/{}/posts".format(author_id)
+		url = f"https://api.medium.com/v1/users/{author_id}/posts"
 		response = requests.post(url, headers=self.__get_header(), data=data)
-		if response.status_code in [200, 201]:
-			response_json = response.json()
-			# get URL of uploaded post
-			pub_url = response_json["data"]["url"]
-			return pub_url
-		return None
+		if response.status_code not in [200, 201]:
+			return None
+
+		response_json = response.json()
+		# get URL of uploaded post
+		pub_url = response_json["data"]["url"]
+		return pub_url
 
 if __name__ == "__main__":
 	# initialise parser
@@ -88,7 +89,10 @@ if __name__ == "__main__":
 
 	# read arguments
 	args = parser.parse_args()
+	print(f'{ args= }')
 
 	data = MediumPublisher.prep_data(vars(args))
+	print(f'{ data["title"], data["publishStatus"]= }')
+
 	post_url = MediumPublisher.post_article(data)
 	print(f'{ post_url= }')
