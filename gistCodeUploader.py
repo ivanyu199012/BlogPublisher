@@ -1,6 +1,5 @@
 #
 import re
-import ntpath
 
 
 class GistCodeUploader:
