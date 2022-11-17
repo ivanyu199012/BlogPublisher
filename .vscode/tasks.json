@@ -23,7 +23,7 @@
 			"type": "shell",
 			"command": "blogPubEnv\\Scripts\\python.exe",
 			"args": [
-				"gistCodeHandlerTest.py",
+				"test/gistCodeHandlerTest.py",
 			]
 		}
 	]
