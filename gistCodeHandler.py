@@ -14,6 +14,10 @@ class GistCodeHandler:
 		"python" : "py",
 		"javascript" : "js"
 	}
+	HEADERS = {
+		"Accept": "application/vnd.github+json",
+		"Authorization": f"Bearer {ConfigHandler.get_github_token()}",
+	}
 
 	@classmethod
 	def exec(self, path):
@@ -62,11 +66,6 @@ class GistCodeHandler:
 
 	@classmethod
 	def upload_code_block_to_gist( self, id_2_code_block_info_dict : dict ):
-		headers = {
-			"Accept": "application/vnd.github+json",
-			"Authorization": f"Bearer {ConfigHandler.get_github_token()}",
-		}
-
 		id_2_gist_link_dict = {}
 		for id, code_block_info_dict in id_2_code_block_info_dict.items():
 			filename = id.replace( self.DELIMITER, "" ) + f".{ self.LANG_2_FILE_EXT[ code_block_info_dict[ self.LANG_KEY ] ] }"
@@ -75,7 +74,7 @@ class GistCodeHandler:
 				"public": "false",
 				"files":{ filename:{ "content" : code_block_info_dict[ self.CODE_BLOCK_KEY ] }}
 			}
-			response = requests.post("https://api.github.com/gists", headers=headers, data=json.dumps(data_dict))
+			response = requests.post("https://api.github.com/gists", headers=self.HEADERS, data=json.dumps(data_dict))
 
 			if response.status_code not in [200, 201]:
 				print(f'{ response.status_code= }')
@@ -86,3 +85,15 @@ class GistCodeHandler:
 			print( f"{ id = }, { id_2_gist_link_dict[ id ] = }" )
 
 		return id_2_gist_link_dict
+
+	@classmethod
+	def delete_gists( self, gist_id_list ):
+		for gist_id in gist_id_list:
+			response = requests.delete(f"https://api.github.com/gists/{gist_id}", headers=self.HEADERS )
+
+			if response.status_code not in [204]:
+				print(f'{ response.status_code= }')
+				print(f'{ response.content= }')
+				return None
+
+			print( f"Delete Gist #{gist_id} successfully." )
