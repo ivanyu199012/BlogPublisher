@@ -5,6 +5,8 @@ import re
 class GistCodeUploader:
 
 	DELIMITER = "_@_"
+	LANG_KEY = "LANGUAGE"
+	CODE_BLOCK_KEY = "CODE_BLOCK"
 
 	@classmethod
 	def exec(self, path):
@@ -27,7 +29,18 @@ class GistCodeUploader:
 		for index, code_block in enumerate(code_block_arr):
 			id = f'{self.DELIMITER}{file_base_name}_code_{index}{self.DELIMITER}'
 			temp_markdown_text = temp_markdown_text.replace(code_block, id)
-			id_2_code_block_info_dict[id] = code_block
+
+			language = None
+			if re.search( '```(.*)\n', code_block ):
+				language = re.search( '```(.*)\n', code_block ).group( 0 ).replace( '```', '' ).replace( '\n', '' )
+
+			pure_code_block = re.sub('```.*\n', '', code_block)
+			pure_code_block = re.sub('```', '', pure_code_block)
+
+			id_2_code_block_info_dict[id] = {
+				self.LANG_KEY : language,
+				self.CODE_BLOCK_KEY : pure_code_block
+			}
 
 		return id_2_code_block_info_dict, temp_markdown_text
 
