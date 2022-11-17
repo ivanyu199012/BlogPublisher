@@ -19,8 +19,14 @@ class GistCodeUploaderTest( unittest.TestCase ) :
 		content = GistCodeUploader.read_file( file_path )
 		file_basename = ntpath.basename( file_path )
 		id_2_code_block_info_dict, temp_markdown_text = GistCodeUploader.convert_code_block_to_id( file_basename, content )
-		print(f'{ id_2_code_block_info_dict= }')
-		print( temp_markdown_text )
+
+		for id in id_2_code_block_info_dict:
+			self.assertEqual( file_basename in id, True )
+			code_block_info_dict = id_2_code_block_info_dict[ id ]
+			self.assertEqual( code_block_info_dict[ GistCodeUploader.LANG_KEY ], "python" )
+			self.assertEqual( id in temp_markdown_text, True )
+
+
 
 
 if __name__ == '__main__':
