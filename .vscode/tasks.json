@@ -25,6 +25,14 @@
 			"args": [
 				"test/gistCodeHandlerTest.py",
 			]
+		},
+		{
+			"label": "Test devTOPublisher",
+			"type": "shell",
+			"command": "blogPubEnv\\Scripts\\python.exe",
+			"args": [
+				"test/devTOPublisherTest.py",
+			]
 		}
 	]
 }

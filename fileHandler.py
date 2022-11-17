@@ -1,5 +1,8 @@
 
 
+import json
+
+
 class FileHandler:
 
 	@classmethod
@@ -17,3 +20,8 @@ class FileHandler:
 			file_ext = "markdown"
 
 		return content, file_ext
+
+	@classmethod
+	def write_dict_2_json_file( self, filename_no_ext, dictionary ):
+		with open( f"temp\{ filename_no_ext }.json", "w" ) as f:
+			json.dump( dictionary, f, indent=4)
