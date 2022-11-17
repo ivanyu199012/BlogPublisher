@@ -1,5 +1,6 @@
 #
 import json
+import ntpath
 import re
 import requests
 from configHandler import ConfigHandler
@@ -20,9 +21,12 @@ class GistCodeHandler:
 	}
 
 	@classmethod
-	def exec(self, path):
+	def convert_blog_code_2_gists(self, path):
 		content = self.read_file(path)
-		self.convert_code_block_to_id(content)
+		file_basename = ntpath.basename( path )
+		id_2_code_block_info_dict, temp_markdown_text = self.convert_code_block_to_id( file_basename, content )
+		id_2_gist_link_dict = self.upload_code_block_to_gist( id_2_code_block_info_dict )
+		return temp_markdown_text, id_2_gist_link_dict
 
 	@classmethod
 	def read_file(self, path):

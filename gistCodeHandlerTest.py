@@ -58,8 +58,18 @@ class GistCodeUploaderTest( unittest.TestCase ) :
 			id_2_gist_link_dict = json.load( f )
 
 		gist_id_list = [ gist_link.replace( "https://gist.github.com/", "" ) for gist_link in id_2_gist_link_dict.values() ]
-
 		GistCodeHandler.delete_gists( gist_id_list )
+
+	def test_5_convert_blog_code_2_gists( self ):
+		temp_markdown_text, id_2_gist_link_dict = GistCodeHandler.convert_blog_code_2_gists( self.file_path )
+
+		self.assertEqual( "Introduction" in temp_markdown_text, True )
+		for id in id_2_gist_link_dict:
+			self.assertEqual( id in temp_markdown_text, True )
+
+		gist_id_list = [ gist_link.replace( "https://gist.github.com/", "" ) for gist_link in id_2_gist_link_dict.values() ]
+		GistCodeHandler.delete_gists( gist_id_list )
+
 
 
 
