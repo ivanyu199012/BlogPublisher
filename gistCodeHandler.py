@@ -1,12 +1,19 @@
 #
+import json
 import re
+import requests
+from configHandler import ConfigHandler
 
 
-class GistCodeUploader:
+class GistCodeHandler:
 
 	DELIMITER = "_@_"
 	LANG_KEY = "LANGUAGE"
 	CODE_BLOCK_KEY = "CODE_BLOCK"
+	LANG_2_FILE_EXT = {
+		"python" : "py",
+		"javascript" : "js"
+	}
 
 	@classmethod
 	def exec(self, path):
@@ -45,12 +52,37 @@ class GistCodeUploader:
 		return id_2_code_block_info_dict, temp_markdown_text
 
 	@classmethod
-	def save_temp_markdown_file(self, temp_markdown_text):
-		path = None
+	def save_file(self, filename_with_ext, text):
+		path = f"temp/temp_{filename_with_ext}"
+
+		with open(path, 'w', encoding='utf-8') as f:
+			f.write( text )
+
 		return path
 
 	@classmethod
-	def upload_code_block_to_gist(self, id_2_code_block_info_dict):
+	def upload_code_block_to_gist( self, id_2_code_block_info_dict : dict ):
+		headers = {
+			"Accept": "application/vnd.github+json",
+			"Authorization": f"Bearer {ConfigHandler.get_github_token()}",
+		}
+
 		id_2_gist_link_dict = {}
+		for id, code_block_info_dict in id_2_code_block_info_dict.items():
+			filename = id.replace( self.DELIMITER, "" ) + f".{ self.LANG_2_FILE_EXT[ code_block_info_dict[ self.LANG_KEY ] ] }"
+			data_dict = {
+				"description": id.replace( self.DELIMITER, "" ),
+				"public": "false",
+				"files":{ filename:{ "content" : code_block_info_dict[ self.CODE_BLOCK_KEY ] }}
+			}
+			response = requests.post("https://api.github.com/gists", headers=headers, data=json.dumps(data_dict))
+
+			if response.status_code not in [200, 201]:
+				print(f'{ response.status_code= }')
+				print(f'{ response.content= }')
+				return None
+
+			id_2_gist_link_dict[ id ] = response.json()["html_url"]
+			print( f"{ id = }, { id_2_gist_link_dict[ id ] = }" )
 
 		return id_2_gist_link_dict
