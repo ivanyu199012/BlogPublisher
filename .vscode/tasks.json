@@ -23,6 +23,14 @@
 			]
 		},
 		{
+			"label": "Delete Gist by gist_id_list.json",
+			"type": "shell",
+			"command": "blogPubEnv\\Scripts\\python.exe",
+			"args": [
+				"deleteGistCode.py",
+			]
+		},
+		{
 			"label": "Test gistCodeUploader",
 			"type": "shell",
 			"command": "blogPubEnv\\Scripts\\python.exe",
