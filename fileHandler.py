@@ -19,9 +19,9 @@ class FileHandler:
 		return content, file_ext
 
 	@classmethod
-	def write_dict_2_json_file( self, filename_no_ext, dictionary ):
+	def write_obj_2_json_file( self, filename_no_ext, obj ):
 		with open( f"temp\{ filename_no_ext }.json", "w" ) as f:
-			json.dump( dictionary, f, indent=4)
+			json.dump( obj, f, indent=4)
 
 	@classmethod
 	def read_json_file_2_dict( self, filepath ) -> dict:

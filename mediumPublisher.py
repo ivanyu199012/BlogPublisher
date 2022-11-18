@@ -26,11 +26,10 @@ class MediumPublisher(Publisher):
 	@classmethod
 	def prep_req_data_dict(self, args, markdown_content) -> dict:
 		'''prepares payload to publish post'''
-		content_format = "markdown" if args[ 'contentFormat' ] == 'md' else args[ 'contentFormat' ]
 		data = {
 			"title": args['title'],
 			"content": markdown_content,
-			"contentFormat": content_format,
+			"contentFormat": "markdown" if args[ 'contentFormat' ] == 'md' else args[ 'contentFormat' ],
 		}
 
 		if args['tags']:

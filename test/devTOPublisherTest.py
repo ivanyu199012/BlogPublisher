@@ -38,7 +38,7 @@ class DevTOPublisherTest( unittest.TestCase ) :
 		req_data_dict = DevTOPublisher.prep_req_data_dict( vars( args ), self.markdown_text )
 		self.assertEqual( "article" in req_data_dict, True )
 
-		FileHandler.write_dict_2_json_file( "req_data_dict", req_data_dict )
+		FileHandler.write_obj_2_json_file( "req_data_dict", req_data_dict )
 
 	def test_1_post_article( self ):
 		req_data_dict = FileHandler.read_json_file_2_dict( "temp/req_data_dict.json" )

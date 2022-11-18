@@ -49,7 +49,7 @@ class DevTOPublisherTest( unittest.TestCase ) :
 		for key in ["title", "content", "contentFormat"]:
 			self.assertEqual( key in req_data_dict, True)
 
-		FileHandler.write_dict_2_json_file( "req_data_dict", req_data_dict )
+		FileHandler.write_obj_2_json_file( "req_data_dict", req_data_dict )
 
 	def test_1_post_article( self ):
 		req_data_dict = FileHandler.read_json_file_2_dict( "temp/req_data_dict.json" )
