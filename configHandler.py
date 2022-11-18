@@ -17,3 +17,7 @@ class ConfigHandler:
 	def get_dev_to_api_key( self ):
 		return self.config_dict[ "DEV_TO_TOKEN" ]
 
+	@classmethod
+	def get_medium_token( self ):
+		return self.config_dict[ "MEDIUM_TOKEN" ]
+

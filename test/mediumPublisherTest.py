@@ -42,8 +42,8 @@ class DevTOPublisherTest( unittest.TestCase ) :
 		arg_dict = vars( args )
 		arg_dict[ "contentFormat" ] = self.file_ext
 		temp_markdown_text, id_2_gist_link_dict = GistCodeHandler.convert_blog_code_2_gists( self.file_basename, self.markdown_text )
-		gist_id_list = [ gist_link.replace( "https://gist.github.com/", "" ) for gist_link in id_2_gist_link_dict.values() ]
-		GistCodeHandler.delete_gists( gist_id_list )
+		# gist_id_list = [ gist_link.replace( "https://gist.github.com/", "" ) for gist_link in id_2_gist_link_dict.values() ]
+		# GistCodeHandler.delete_gists( gist_id_list )
 		temp_markdown_text = MediumPublisher.format_markdown_text( temp_markdown_text, id_2_gist_link_dict  )
 		req_data_dict = MediumPublisher.prep_req_data_dict( arg_dict, temp_markdown_text)
 		for key in ["title", "content", "contentFormat"]:
@@ -52,7 +52,9 @@ class DevTOPublisherTest( unittest.TestCase ) :
 		FileHandler.write_dict_2_json_file( "req_data_dict", req_data_dict )
 
 	def test_1_post_article( self ):
-		pass
+		req_data_dict = FileHandler.read_json_file_2_dict( "temp/req_data_dict.json" )
+		url = MediumPublisher.post_article( req_data_dict )
+		print(f'{ url= }')
 
 if __name__ == '__main__':
 	unittest.main()
