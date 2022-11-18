@@ -49,5 +49,4 @@ class DevTOPublisher( Publisher ):
 			return None
 
 		post_url = f'{response.json()["url"]}/edit'
-		print(f'{ post_url= }')
 		return post_url
