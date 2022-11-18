@@ -8,6 +8,10 @@ import requests
 class DevTOPublisher( Publisher ):
 
 	@classmethod
+	def format_markdown_text( self, markdown_content : str, id_2_gist_link_dict : dict = None  ) -> str:
+		return markdown_content.replace( "# ", "## " )
+
+	@classmethod
 	def prep_req_data_dict(self, args, markdown_content) -> dict:
 		articles_dict = {
 			"title" : args[ "title" ],
