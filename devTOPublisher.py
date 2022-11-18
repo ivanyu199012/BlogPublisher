@@ -17,7 +17,7 @@ class DevTOPublisher( Publisher ):
 			"title" : args[ "title" ],
 			"body_markdown" :markdown_content,
 			"published" : args['pub'] if "true" else "false",
-			"canonicalUrl" : args['canonicalUrl'],
+			"canonical_url" : args['canonicalUrl'],
 			"series" : args['series']
 		}
 
