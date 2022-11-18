@@ -9,6 +9,7 @@ current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 sys.path.append(parent)
 
+from fileHandler import FileHandler
 from gistCodeHandler import GistCodeHandler
 
 class GistCodeUploaderTest( unittest.TestCase ) :
@@ -16,14 +17,11 @@ class GistCodeUploaderTest( unittest.TestCase ) :
 	def setUp(self):
 		print ( f"Method: { self._testMethodName }" )
 		self.file_path = "temp/Django_background_task.md"
+		self.markdown_text, self.file_ext = FileHandler.read_file( self.file_path )
 
-
-	def test_0_read_file( self ):
-		content = GistCodeHandler.read_file( self.file_path )
-		self.assertEqual( "Introduction" in content, True )
 
 	def test_1_convert_code_block_to_id( self ):
-		content = GistCodeHandler.read_file( self.file_path )
+		content, _ = FileHandler.read_file( self.file_path )
 		file_basename = ntpath.basename( self.file_path )
 		id_2_code_block_info_dict, temp_markdown_text = GistCodeHandler.convert_code_block_to_id( file_basename, content )
 
@@ -37,7 +35,7 @@ class GistCodeUploaderTest( unittest.TestCase ) :
 			json.dump( id_2_code_block_info_dict, f, indent=4)
 
 	def test_2_save_temp_markdown_file( self ):
-		content = GistCodeHandler.read_file( self.file_path )
+		content, _ = FileHandler.read_file( self.file_path )
 		file_basename = ntpath.basename( self.file_path )
 		_, temp_markdown_text = GistCodeHandler.convert_code_block_to_id( file_basename, content )
 
@@ -67,7 +65,8 @@ class GistCodeUploaderTest( unittest.TestCase ) :
 		GistCodeHandler.delete_gists( gist_id_list )
 
 	def test_5_convert_blog_code_2_gists( self ):
-		temp_markdown_text, id_2_gist_link_dict = GistCodeHandler.convert_blog_code_2_gists( self.file_path )
+		file_basename = ntpath.basename( self.file_path )
+		temp_markdown_text, id_2_gist_link_dict = GistCodeHandler.convert_blog_code_2_gists( file_basename, self.markdown_text )
 
 		self.assertEqual( "Introduction" in temp_markdown_text, True )
 		for id in id_2_gist_link_dict:

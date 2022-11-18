@@ -16,9 +16,6 @@ class FileHandler:
 			return content, ""
 
 		file_ext = filepath[ filepath.find(".")+1: ]
-		if file_ext == "md":
-			file_ext = "markdown"
-
 		return content, file_ext
 
 	@classmethod

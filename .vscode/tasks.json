@@ -33,6 +33,14 @@
 			"args": [
 				"test/devTOPublisherTest.py",
 			]
+		},
+		{
+			"label": "Test mediumPublisherTest",
+			"type": "shell",
+			"command": "blogPubEnv\\Scripts\\python.exe",
+			"args": [
+				"test/mediumPublisherTest.py",
+			]
 		}
 	]
 }

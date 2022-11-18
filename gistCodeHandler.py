@@ -4,6 +4,7 @@ import ntpath
 import re
 import requests
 from configHandler import ConfigHandler
+from fileHandler import FileHandler
 
 
 class GistCodeHandler:
@@ -21,19 +22,10 @@ class GistCodeHandler:
 	}
 
 	@classmethod
-	def convert_blog_code_2_gists(self, path):
-		content = self.read_file(path)
-		file_basename = ntpath.basename( path )
+	def convert_blog_code_2_gists(self, file_basename, content):
 		id_2_code_block_info_dict, temp_markdown_text = self.convert_code_block_to_id( file_basename, content )
 		id_2_gist_link_dict = self.upload_code_block_to_gist( id_2_code_block_info_dict )
 		return temp_markdown_text, id_2_gist_link_dict
-
-	@classmethod
-	def read_file(self, path):
-		content = None
-		with open(path, 'r', encoding='utf-8') as f:
-			content = f.read()
-		return content
 
 	@classmethod
 	def convert_code_block_to_id(self, file_base_name, markdown_text):
@@ -75,7 +67,7 @@ class GistCodeHandler:
 			filename = id.replace( self.DELIMITER, "" ) + f".{ self.LANG_2_FILE_EXT[ code_block_info_dict[ self.LANG_KEY ] ] }"
 			data_dict = {
 				"description": id.replace( self.DELIMITER, "" ),
-				"public": "false",
+				"public": "true",
 				"files":{ filename:{ "content" : code_block_info_dict[ self.CODE_BLOCK_KEY ] }}
 			}
 			response = requests.post("https://api.github.com/gists", headers=self.HEADERS, data=json.dumps(data_dict))
