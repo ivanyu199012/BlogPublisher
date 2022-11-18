@@ -1,6 +1,7 @@
 
 
 import json
+import pathlib
 
 
 class FileHandler:
@@ -15,7 +16,7 @@ class FileHandler:
 		if filepath.find('.') < 0:
 			return content, ""
 
-		file_ext = filepath[ filepath.find(".")+1: ]
+		file_ext = pathlib.Path(filepath).suffix.replace( ".", "" )
 		return content, file_ext
 
 	@classmethod
