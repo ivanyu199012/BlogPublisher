@@ -1,7 +1,9 @@
 #
 
+import json
 from publisher import Publisher
-
+from configHandler import ConfigHandler
+import requests
 
 class DevTOPublisher( Publisher ):
 
@@ -22,7 +24,7 @@ class DevTOPublisher( Publisher ):
 			articles_dict["description"] = args["subtitle"]
 
 		if args[ 'tags' ]:
-			articles_dict['tags'] = [t.strip() for t in args['tags'].split(',')]
+			articles_dict['tags'] = [t.strip().replace( " ", "" ) for t in args['tags'].split(',')]
 
 		return {
 			"article" : articles_dict
@@ -30,4 +32,18 @@ class DevTOPublisher( Publisher ):
 
 	@classmethod
 	def post_article(self, req_data_dict) -> str:
-		raise NotImplementedError
+		headers = {
+			"Content-Type"	:"application/json",
+			"api-key": ConfigHandler.get_dev_to_api_key(),
+		}
+		url = "https://dev.to/api/articles"
+		response = requests.post(url, headers=headers, data=json.dumps( req_data_dict ))
+
+		if response.status_code not in [201]:
+			print(f'{ response.status_code= }')
+			print(f'{ response.content= }')
+			return None
+
+		post_url = f'{response.json()["url"]}/edit'
+		print(f'{ post_url= }')
+		return post_url

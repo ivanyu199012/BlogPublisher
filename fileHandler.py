@@ -25,3 +25,8 @@ class FileHandler:
 	def write_dict_2_json_file( self, filename_no_ext, dictionary ):
 		with open( f"temp\{ filename_no_ext }.json", "w" ) as f:
 			json.dump( dictionary, f, indent=4)
+
+	@classmethod
+	def read_json_file_2_dict( self, filepath ) -> dict:
+		with open( filepath, "r", encoding='utf-8' ) as f:
+			return json.load( f )
