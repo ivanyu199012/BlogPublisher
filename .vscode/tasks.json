@@ -4,6 +4,27 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "Publish Blog",
+			"type": "shell",
+			"command": "blogPubEnv\\Scripts\\python.exe",
+			"args": [
+				"publish.py",
+				"C:\\MyFiles\\Git\\3. Blog\\blog\\1. Nginx_custom log file, reverse proxy_load balancer.md",
+				"-t",
+				"Nginx: custom log file, reverse proxy, and load balancer",
+				"--series",
+				"Other",
+				"--site",
+				"DEVTO,MEDIUM",
+				"--canonicalUrl",
+				"https://ivanyu2021.hashnode.dev/nginx-custom-log-file-reverse-proxy-and-load-balancer",
+				"--imageUrl",
+				"\"https://ivanyu2021.hashnode.dev/_next/image?url=https%3A%2F%2Fcdn.hashnode.com%2Fres%2Fhashnode%2Fimage%2Fupload%2Fv1626849607140%2FG6yygs8VB3.png%3Fw%3D1600%26h%3D840%26fit%3Dcrop%26crop%3Dentropy%26auto%3Dcompress%2Cformat%26format%3Dwebp&w=1920&q=75\"",
+				"--tags",
+				"Nginx,Reverse Proxy,Load Balancer"
+			]
+		},
+		{
 			"label": "Test publish",
 			"type": "shell",
 			"command": "blogPubEnv\\Scripts\\python.exe",
